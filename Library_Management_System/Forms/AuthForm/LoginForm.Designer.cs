@@ -49,7 +49,7 @@ namespace Library_Management_System
             this.d.Dock = System.Windows.Forms.DockStyle.Top;
             this.d.Location = new System.Drawing.Point(0, 0);
             this.d.Name = "d";
-            this.d.Size = new System.Drawing.Size(745, 149);
+            this.d.Size = new System.Drawing.Size(688, 149);
             this.d.TabIndex = 0;
             // 
             // label1
@@ -57,7 +57,7 @@ namespace Library_Management_System
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(172, 24);
+            this.label1.Location = new System.Drawing.Point(44, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(371, 91);
             this.label1.TabIndex = 0;
@@ -100,21 +100,22 @@ namespace Library_Management_System
             // 
             // btnLogin
             // 
+            this.btnLogin.BackColor = System.Drawing.Color.Red;
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.Location = new System.Drawing.Point(311, 417);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(232, 59);
             this.btnLogin.TabIndex = 5;
             this.btnLogin.Text = "Login";
-            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.UseVisualStyleBackColor = false;
             // 
             // btnRegister
             // 
-            this.btnRegister.BackColor = System.Drawing.Color.IndianRed;
+            this.btnRegister.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnRegister.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegister.Location = new System.Drawing.Point(12, 507);
+            this.btnRegister.Location = new System.Drawing.Point(253, 482);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(375, 64);
+            this.btnRegister.Size = new System.Drawing.Size(344, 64);
             this.btnRegister.TabIndex = 6;
             this.btnRegister.Text = "Create New Account";
             this.btnRegister.UseVisualStyleBackColor = false;
@@ -123,8 +124,8 @@ namespace Library_Management_System
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DarkGray;
-            this.ClientSize = new System.Drawing.Size(745, 608);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.ClientSize = new System.Drawing.Size(688, 577);
             this.Controls.Add(this.btnRegister);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.txtEmail);
