@@ -20,8 +20,13 @@ namespace Library_Management_System
         public System.DateTime BorrowDate { get; set; }
         public Nullable<System.DateTime> ReturnDate { get; set; }
         public bool IsReturned { get; set; }
+        public int BaseDailyFee { get; set; }
+        public int ExtraDailyFee { get; set; }
+        public Nullable<int> TotalFee { get; set; }
+        public bool AcceptedTerms { get; set; }
     
         public virtual Book Book { get; set; }
         public virtual User User { get; set; }
+
     }
 }

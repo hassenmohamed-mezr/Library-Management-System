@@ -54,9 +54,38 @@ namespace Library_Management_System.Services
             _context.SaveChanges();
             return true;
         }
+        public List<Book> GetBooksByIds(List<int> bookIds)
+        {
+            return _context.Books
+                .Where(b => bookIds.Contains(b.BookId))
+                .ToList();
+        }
+
 
         // Search books
-        public List<Book> SearchBooks(string keyword)
+
+        public List<Book> SearchByTitle(string title)
+        {
+            return _context.Books
+                .Where(b => b.Title.Contains(title))
+                .ToList();
+        }
+
+        public List<Book> SearchByAuthor(string author)
+        {
+            return _context.Books
+                .Where(b => b.Author.Contains(author))
+                .ToList();
+        }
+
+        public List<Book> SearchByCategory(string category)
+        {
+            return _context.Books
+                .Where(b => b.Category.Contains(category))
+                .ToList();
+        }
+
+        public List<Book> SearchAny(string keyword)
         {
             return _context.Books
                 .Where(b =>

@@ -73,11 +73,42 @@
     <Compile Include="Borrow.cs">
       <DependentUpon>LibraryDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LoginForm.cs">
+    <Compile Include="Forms\AdminDashboardForms\AdminDashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LoginForm.Designer.cs">
+    <Compile Include="Forms\AdminDashboardForms\AdminDashboardForm.Designer.cs">
+      <DependentUpon>AdminDashboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\BorrowBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\BorrowBookForm.Designer.cs">
+      <DependentUpon>BorrowBookForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\UserDashboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\UserDashboardForm.Designer.cs">
+      <DependentUpon>UserDashboardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AuthForm\RegisterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthForm\.Designer.cs">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthForm\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthForm\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\UserSearchBooksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\UserSearchBooksForm.Designer.cs">
+      <DependentUpon>UserSearchBooksForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LibraryDB.Context.cs">
       <AutoGen>True</AutoGen>
@@ -99,8 +130,20 @@
     <Compile Include="User.cs">
       <DependentUpon>LibraryDB.tt</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\LoginForm.resx">
+    <EmbeddedResource Include="Forms\AuthForm\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AuthForm\RegisterForm.resx">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserDashboardForms\BorrowBookForm.resx">
+      <DependentUpon>BorrowBookForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserDashboardForms\UserDashboardForm.resx">
+      <DependentUpon>UserDashboardForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserDashboardForms\UserSearchBooksForm.resx">
+      <DependentUpon>UserSearchBooksForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="e2addbc7ab444c569ff345c6990b42d7" Name="Diagram1">
         <EntityTypeShape EntityType="LibraryDBModel.Book" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="LibraryDBModel.Borrow" Width="1.5" PointX="4.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryDBModel.Borrow" Width="1.5" PointX="4.5" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="LibraryDBModel.User" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="LibraryDBModel.FK_Borrows_Books" ManuallyRouted="false" />
         <AssociationConnector Association="LibraryDBModel.FK_Borrows_Users" ManuallyRouted="false" />

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LibraryDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LibraryDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Books">
           <Key>
             <PropertyRef Name="BookId" />
@@ -27,6 +27,10 @@
           <Property Name="BorrowDate" Type="datetime" Nullable="false" />
           <Property Name="ReturnDate" Type="datetime" />
           <Property Name="IsReturned" Type="bit" Nullable="false" />
+          <Property Name="BaseDailyFee" Type="int" Nullable="false" />
+          <Property Name="ExtraDailyFee" Type="int" Nullable="false" />
+          <Property Name="TotalFee" Type="int" />
+          <Property Name="AcceptedTerms" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -76,8 +80,7 @@
             <End Role="Borrows" EntitySet="Borrows" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LibraryDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -106,6 +109,10 @@
           <Property Name="IsReturned" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Book" Relationship="Self.FK_Borrows_Books" FromRole="Borrows" ToRole="Books" />
           <NavigationProperty Name="User" Relationship="Self.FK_Borrows_Users" FromRole="Borrows" ToRole="Users" />
+          <Property Name="BaseDailyFee" Type="Int32" Nullable="false" />
+          <Property Name="ExtraDailyFee" Type="Int32" Nullable="false" />
+          <Property Name="TotalFee" Type="Int32" />
+          <Property Name="AcceptedTerms" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -178,6 +185,10 @@
           <EntitySetMapping Name="Borrows">
             <EntityTypeMapping TypeName="LibraryDBModel.Borrow">
               <MappingFragment StoreEntitySet="Borrows">
+                <ScalarProperty Name="AcceptedTerms" ColumnName="AcceptedTerms" />
+                <ScalarProperty Name="TotalFee" ColumnName="TotalFee" />
+                <ScalarProperty Name="ExtraDailyFee" ColumnName="ExtraDailyFee" />
+                <ScalarProperty Name="BaseDailyFee" ColumnName="BaseDailyFee" />
                 <ScalarProperty Name="BorrowId" ColumnName="BorrowId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
