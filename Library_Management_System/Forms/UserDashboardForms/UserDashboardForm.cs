@@ -9,7 +9,24 @@ namespace Library_Management_System
     {
         private readonly User _currentUser;
         private readonly HashSet<int> _cartBookIds = new HashSet<int>();
+        private void OpenBorrowFromCart()
+        {
+            if (_cartBookIds.Count == 0)
+            {
+                MessageBox.Show("Your cart is empty. Add books first.");
+                return;
+            }
 
+            this.Hide();
+            using (var borrowForm = new BorrowFromCartForm(_currentUser, _cartBookIds))
+            {
+                borrowForm.Owner = this;
+                borrowForm.ShowDialog();
+            }
+            this.Show();
+            this.Activate();
+
+        }
 
         public UserDashboardForm(User currentUser)
         {
@@ -20,7 +37,7 @@ namespace Library_Management_System
             lblWelcome.Text = _currentUser == null
                 ? "Welcome"
                 : $"Welcome, {_currentUser.FullName}";
-            btnBack.Click += (s, e) => this.Hide(); // Hide the Dashboard, do not close it
+            btnBack.Click += (s, e) => this.Close(); 
             btnLogout.Click += (s, e) => Application.Exit();  // Logout -> exit the app completely
 
             // Temporary placeholders
@@ -33,24 +50,35 @@ namespace Library_Management_System
             };
 
 
-            btnBorrowBook.Click += (s, e) =>
+            btnBorrowBook.Click += (s, e) => OpenBorrowFromCart();
+
+            btnReturnBook.Click += (s, e) =>
             {
-                this.Hide();  
-
-                using (var borrowForm = new BorrowBookForm(_currentUser))
+                this.Hide();
+                using (var returnForm = new ReturnBookForm(_currentUser))
                 {
-                    borrowForm.Owner = this;  
-                    borrowForm.ShowDialog();  
+                    returnForm.Owner = this;
+                    returnForm.ShowDialog();
                 }
-
-                this.Show();  
+                this.Show();
                 this.Activate();
             };
 
 
+            btnMyHistory.Click += (s, e) =>
+            {
+                this.Hide();
+                using (var historyForm = new MyBorrowHistoryForm(_currentUser))
+                {
+                    historyForm.Owner = this;
+                    historyForm.ShowDialog();
+                }
+                this.Show();
+                this.Activate();
 
-            btnReturnBook.Click += (s, e) => MessageBox.Show("Return Book - not implemented yet.");
-            btnMyHistory.Click += (s, e) => MessageBox.Show("My Borrow History - not implemented yet.");
+            };
+
+
         }
     }
 }

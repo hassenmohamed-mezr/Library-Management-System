@@ -27,6 +27,5 @@ namespace Library_Management_System
     
         public virtual Book Book { get; set; }
         public virtual User User { get; set; }
-
     }
 }

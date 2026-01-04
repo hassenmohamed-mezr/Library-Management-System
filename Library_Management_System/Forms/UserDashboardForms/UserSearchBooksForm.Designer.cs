@@ -1,4 +1,7 @@
-﻿namespace Library_Management_System
+﻿using System;
+using System.Windows.Forms;
+
+namespace Library_Management_System
 {
     partial class UserSearchBooksForm
     {
@@ -167,6 +170,12 @@
             // 
             // btnAddToCart
             // 
+            this.btnViewCart = new System.Windows.Forms.Button();
+            this.btnViewCart.BackColor = System.Drawing.Color.Orange;
+            this.btnViewCart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.btnViewCart.Location = new System.Drawing.Point(650, 500);
+            this.btnViewCart.Size = new System.Drawing.Size(180, 40);
+            this.btnViewCart.Text = "View Cart & Borrow";
             this.btnAddToCart.BackColor = System.Drawing.Color.SpringGreen;
             this.btnAddToCart.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddToCart.Location = new System.Drawing.Point(847, 138);
@@ -211,6 +220,7 @@
         private System.Windows.Forms.Panel pnlTop;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnViewCart;
 
         private System.Windows.Forms.Label lblSearchTitle;
         private System.Windows.Forms.TextBox txtTitle;
