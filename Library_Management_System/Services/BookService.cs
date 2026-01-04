@@ -54,6 +54,9 @@ namespace Library_Management_System.Services
             _context.SaveChanges();
             return true;
         }
+
+
+        //GetBooksByIds
         public List<Book> GetBooksByIds(List<int> bookIds)
         {
             return _context.Books
@@ -62,37 +65,68 @@ namespace Library_Management_System.Services
         }
 
 
-        // Search books
-
+        // Search books by title
         public List<Book> SearchByTitle(string title)
         {
+            string titleLower = title.ToLower();
             return _context.Books
-                .Where(b => b.Title.Contains(title))
+                .Where(b => b.Title.ToLower().Contains(titleLower))
                 .ToList();
         }
 
+
+
+        // Search books by author
         public List<Book> SearchByAuthor(string author)
         {
+            string authorLower = author.ToLower();
             return _context.Books
-                .Where(b => b.Author.Contains(author))
+                .Where(b => b.Author.ToLower().Contains(authorLower))
                 .ToList();
         }
 
+
+
+        // Search books by category
         public List<Book> SearchByCategory(string category)
         {
+            string categoryLower = category.ToLower();
             return _context.Books
-                .Where(b => b.Category.Contains(category))
+                .Where(b => b.Category.ToLower().Contains(categoryLower))
                 .ToList();
         }
 
+
+        // Search books by any field
         public List<Book> SearchAny(string keyword)
         {
+            string keywordLower = keyword.ToLower();
             return _context.Books
                 .Where(b =>
-                    b.Title.Contains(keyword) ||
-                    b.Author.Contains(keyword) ||
-                    b.Category.Contains(keyword))
+                    b.Title.ToLower().Contains(keywordLower) ||
+                    b.Author.ToLower().Contains(keywordLower) ||
+                    b.Category.ToLower().Contains(keywordLower))
                 .ToList();
+        }
+
+        public Book GetBookById(int bookId)
+        {
+            return _context.Books.FirstOrDefault(b => b.BookId == bookId);
+        }
+
+        public bool HasActiveBorrows(int bookId)
+        {
+            var borrowService = new BorrowService();
+            var currentBorrows = borrowService.GetCurrentBorrows();
+            return currentBorrows.Any(b => b.BookId == bookId);
+        }
+
+        public Dictionary<string, int> GetBooksCountByCategory()
+        {
+            return _context.Books
+                .GroupBy(b => b.Category)
+                .Select(g => new { Category = g.Key, Count = g.Count() })
+                .ToDictionary(x => x.Category, x => x.Count);
         }
     }
 }

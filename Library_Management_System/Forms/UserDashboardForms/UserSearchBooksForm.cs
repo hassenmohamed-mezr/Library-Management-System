@@ -27,29 +27,48 @@ namespace Library_Management_System
             btnAddToCart.Click += btnAddToCart_Click;
         }
 
+        private void BtnViewCart_Click(object sender, EventArgs e)
+        {
+            if (_cartBookIds.Count == 0)
+            {
+                MessageBox.Show("Cart is empty", "Info");
+                return;
+            }
+
+            this.Close(); // Close search form
+        }
+
         private void btnAddToCart_Click(object sender, EventArgs e)
         {
             if (gridBooks.CurrentRow == null)
             {
-                MessageBox.Show("Please select a book first.");
+                MessageBox.Show("Select a book first", "Info");
                 return;
             }
 
-            var val = gridBooks.CurrentRow.Cells["BookId"]?.Value;
-            if (val == null)
-            {
-                MessageBox.Show("BookId not found.");
-                return;
-            }
+            var bookIdVal = gridBooks.CurrentRow.Cells["BookId"]?.Value;
+            if (bookIdVal == null) return;
 
-            if (!int.TryParse(val.ToString(), out int bookId) || bookId <= 0)
+            int bookId = Convert.ToInt32(bookIdVal);
+
+            // Check if available
+            var available = gridBooks.CurrentRow.Cells["AvailableCopies"]?.Value;
+            if (available != null && Convert.ToInt32(available) <= 0)
             {
-                MessageBox.Show("Invalid BookId.");
+                MessageBox.Show("Book not available", "Warning");
                 return;
             }
 
             bool added = _cartBookIds.Add(bookId);
-            MessageBox.Show(added ? "Added to cart." : "Already in cart.");
+
+            if (added)
+            {
+                MessageBox.Show("Added to cart", "Success");
+            }
+            else
+            {
+                MessageBox.Show("Already in cart", "Info");
+            }
         }
 
         private void SearchTitle()

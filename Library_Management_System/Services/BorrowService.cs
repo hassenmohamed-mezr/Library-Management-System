@@ -13,6 +13,8 @@ namespace Library_Management_System.Services
             _context = new LibraryDBEntities();
         }
 
+
+
         // Borrow a book by BookId and BookName (with fees + terms acceptance)
         public bool BorrowBook(int userId, int bookId, string bookName, bool acceptedTerms)
         {
@@ -50,6 +52,8 @@ namespace Library_Management_System.Services
             return true;
         }
 
+
+
         // Return a book (calculate total fee)
         public bool ReturnBook(int borrowId)
         {
@@ -79,6 +83,8 @@ namespace Library_Management_System.Services
             return true;
         }
 
+
+
         // Get the list of books that are currently borrowed (not returned)
         public List<Borrow> GetCurrentBorrows()
         {
@@ -86,6 +92,8 @@ namespace Library_Management_System.Services
                 .Where(b => b.IsReturned == false)
                 .ToList();
         }
+
+
 
         // Get borrow history of a specific user
         public List<Borrow> GetBorrowHistory(int userId)
@@ -95,13 +103,44 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
+
+
         // Validate if a book exists with the given BookId and BookName
         public bool ValidateBook(int bookId, string bookName)
         {
             var book = _context.Books
-                .FirstOrDefault(b => b.BookId == bookId && b.Title.Equals(bookName, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(b => b.BookId == bookId &&
+                b.Title.Equals(bookName, StringComparison.OrdinalIgnoreCase));
 
-            return book != null;
+            return book != null && book.AvailableCopies > 0;
+        }
+
+
+
+        //GetAll Borrows for Admin
+        public List<Borrow> GetAllBorrows()
+        {
+            return _context.Borrows.ToList();
+        }
+
+
+
+        // GetBorrowsInPeriod for Admin
+        public List<Borrow> GetBorrowsInPeriod(DateTime startDate, DateTime endDate)
+        {
+            return _context.Borrows
+                .Where(b => b.BorrowDate >= startDate && b.BorrowDate <= endDate)
+                .ToList();
+        }
+
+
+
+        //Get Total Fees In Period
+        public decimal GetTotalFeesInPeriod(DateTime startDate, DateTime endDate)
+        {
+            return _context.Borrows
+                .Where(b => b.BorrowDate >= startDate && b.BorrowDate <= endDate && b.TotalFee.HasValue)
+                .Sum(b => b.TotalFee.Value);
         }
     }
 }

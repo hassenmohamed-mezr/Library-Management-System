@@ -64,9 +64,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthService\AuthService.cs" />
-    <Compile Include="AuthService\BookService.cs" />
-    <Compile Include="AuthService\BorrowService.cs" />
+    <Compile Include="Forms\AdminDashboardForms\ManageBooksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\ManageBooksForm.Designer.cs">
+      <DependentUpon>ManageBooksForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\ManageUsersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\ManageUsersForm.Designer.cs">
+      <DependentUpon>ManageUsersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\ReportsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\ReportsForm.Designer.cs">
+      <DependentUpon>ReportsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\SystemSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdminDashboardForms\SystemSettingsForm.Designer.cs">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AuthService.cs" />
+    <Compile Include="Services\BookService.cs" />
+    <Compile Include="Services\BorrowService.cs" />
     <Compile Include="Book.cs">
       <DependentUpon>LibraryDB.tt</DependentUpon>
     </Compile>
@@ -79,11 +103,23 @@
     <Compile Include="Forms\AdminDashboardForms\AdminDashboardForm.Designer.cs">
       <DependentUpon>AdminDashboardForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UserDashboardForms\BorrowBookForm.cs">
+    <Compile Include="Forms\UserDashboardForms\BorrowFromCartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UserDashboardForms\BorrowBookForm.Designer.cs">
-      <DependentUpon>BorrowBookForm.cs</DependentUpon>
+    <Compile Include="Forms\UserDashboardForms\BorrowFromCartForm.Designer.cs">
+      <DependentUpon>BorrowFromCartForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\MyBorrowHistoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\MyBorrowHistoryForm.Designer.cs">
+      <DependentUpon>MyBorrowHistoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\ReturnBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserDashboardForms\ReturnBookForm.Designer.cs">
+      <DependentUpon>ReturnBookForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\UserDashboardForms\UserDashboardForm.cs">
       <SubType>Form</SubType>
@@ -136,8 +172,8 @@
     <EmbeddedResource Include="Forms\AuthForm\RegisterForm.resx">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UserDashboardForms\BorrowBookForm.resx">
-      <DependentUpon>BorrowBookForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\UserDashboardForms\BorrowFromCartForm.resx">
+      <DependentUpon>BorrowFromCartForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserDashboardForms\UserDashboardForm.resx">
       <DependentUpon>UserDashboardForm.cs</DependentUpon>
