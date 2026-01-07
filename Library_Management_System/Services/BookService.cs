@@ -109,11 +109,13 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
+        // Get one book for id
         public Book GetBookById(int bookId)
         {
             return _context.Books.FirstOrDefault(b => b.BookId == bookId);
         }
 
+        // Get is Active Borrows Book
         public bool HasActiveBorrows(int bookId)
         {
             var borrowService = new BorrowService();
@@ -121,6 +123,7 @@ namespace Library_Management_System.Services
             return currentBorrows.Any(b => b.BookId == bookId);
         }
 
+        // This is query for D( Book , Category )
         public Dictionary<string, int> GetBooksCountByCategory()
         {
             return _context.Books

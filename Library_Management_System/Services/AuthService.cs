@@ -34,6 +34,7 @@ namespace Library_Management_System.Services
             if (_context.Users.Any(u => u.Email == user.Email))
                 return false;
 
+            user.IsAdmin = false;
             _context.Users.Add(user);
             _context.SaveChanges();
             return true;
@@ -55,6 +56,8 @@ namespace Library_Management_System.Services
             
             if (!string.IsNullOrWhiteSpace(updatedUser.Password))
                 user.Password = updatedUser.Password;
+
+            user.IsAdmin = updatedUser.IsAdmin;
 
             _context.SaveChanges();
             return true;
