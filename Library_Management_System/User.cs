@@ -26,6 +26,7 @@ namespace Library_Management_System
         public string Password { get; set; }
         public string Phone { get; set; }
         public System.DateTime CreatedAt { get; set; }
+        public bool IsAdmin { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Borrow> Borrows { get; set; }

@@ -42,6 +42,7 @@
           <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="20" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Borrows_Books">
           <End Role="Books" Type="Self.Books" Multiplicity="1" />
@@ -125,6 +126,7 @@
           <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Borrows" Relationship="Self.FK_Borrows_Users" FromRole="Users" ToRole="Borrows" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_Borrows_Books">
           <End Role="Books" Type="Self.Book" Multiplicity="1" />
@@ -201,6 +203,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="LibraryDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

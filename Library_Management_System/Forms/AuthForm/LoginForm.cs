@@ -40,7 +40,7 @@ namespace Library_Management_System
                 return;
             }
 
-            bool isAdmin = (user.UserId == 1);
+            bool isAdmin = user.IsAdmin;
 
             this.Hide(); // IMPORTANT: do not Close()
 

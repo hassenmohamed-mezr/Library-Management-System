@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Library_Management_System.Services;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Windows.Forms;
-using Library_Management_System.Services;
 
 namespace Library_Management_System
 {
@@ -108,7 +109,7 @@ namespace Library_Management_System
                     txtEmail.Text = user.Email;
                     txtPassword.Text = user.Password;
                     txtPhone.Text = user.Phone;
-                    chkIsAdmin.Checked = (user.UserId == 1); // Simple admin check
+                    chkIsAdmin.Checked = user.IsAdmin; 
                 }
             }
             catch (Exception ex)
@@ -131,7 +132,8 @@ namespace Library_Management_System
                     Email = txtEmail.Text.Trim(),
                     Password = txtPassword.Text,
                     Phone = txtPhone.Text.Trim(),
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    IsAdmin = false
                 };
 
                 bool success = _authService.Register(newUser);
@@ -174,7 +176,8 @@ namespace Library_Management_System
                     FullName = txtFullName.Text.Trim(),
                     Email = txtEmail.Text.Trim(),
                     Password = txtPassword.Text,
-                    Phone = txtPhone.Text.Trim()
+                    Phone = txtPhone.Text.Trim(),
+                    IsAdmin = chkIsAdmin.Checked
                 };
 
                 bool success = _authService.UpdateUser(updatedUser);
@@ -233,9 +236,9 @@ namespace Library_Management_System
                     }
                 }
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                MessageBox.Show($"Delete error: {ex.Message}", "Error");
+                MessageBox.Show(ex.InnerException?.InnerException?.Message);
             }
         }
 
