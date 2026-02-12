@@ -25,6 +25,7 @@ namespace Library_Management_System
             btnDeleteUser.Click += BtnDeleteUser_Click;
             btnClearUser.Click += BtnClearUser_Click;
             btnSearchUser.Click += BtnSearchUser_Click;
+            //btnViewDeleted.Click += BtnViewDeleted_Click;
 
             // Init data
             InitializeForm();
@@ -109,7 +110,7 @@ namespace Library_Management_System
                     txtEmail.Text = user.Email;
                     txtPassword.Text = user.Password;
                     txtPhone.Text = user.Phone;
-                    chkIsAdmin.Checked = user.IsAdmin; 
+                    chkIsAdmin.Checked = user.IsAdmin;
                 }
             }
             catch (Exception ex)
@@ -211,9 +212,23 @@ namespace Library_Management_System
                     return;
                 }
 
+                if (_currentUserId == 1)
+                {
+                    MessageBox.Show("Cannot delete main admin", "Error");
+                    return;
+                }
+                var activeBorrows = _borrowService.GetCurrentBorrows()
+                        .Any(b => b.UserId == _currentUserId);
+
+                if (activeBorrows)
+                {
+                    MessageBox.Show("Cannot delete user with active borrows", "Error");
+                    return;
+                }
+
                 // Confirm
                 var result = MessageBox.Show(
-                    $"Delete user?\nName: {txtFullName.Text}",
+                    $"Delete user?\nName: {txtFullName.Text}\n\nNote: User will be deactivated but borrowing history will remain.",
                     "Confirm Delete",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
@@ -321,7 +336,30 @@ namespace Library_Management_System
             }
         }
 
+        private void BtnViewDeleted_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var deletedUsers = _authService.GetDeletedUsers();
+                if (deletedUsers.Count == 0)
+                {
+                    MessageBox.Show("No deleted users found", "Info");
+                    return;
+                }
 
+                string message = "Deleted Users:\n";
+                foreach (var user in deletedUsers)
+                {
+                    message += $"- {user.FullName} (ID: {user.UserId})\n";
+                }
+
+                MessageBox.Show(message, "Deleted Users");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error");
+            }
+        }
 
         private bool ValidateUserData()
         {
