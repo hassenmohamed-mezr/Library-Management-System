@@ -7,6 +7,7 @@ namespace Library_Management_System.Services
     {
         private readonly LibraryDBEntities _context;
 
+        // Constructor
         public BookService()
         {
             _context = new LibraryDBEntities();
