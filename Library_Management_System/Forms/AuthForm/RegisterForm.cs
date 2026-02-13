@@ -18,6 +18,7 @@ namespace Library_Management_System
         public RegisterForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             btnCreate.Click += btnCreate_Click;
             btnBack.Click += btnBack_Click;

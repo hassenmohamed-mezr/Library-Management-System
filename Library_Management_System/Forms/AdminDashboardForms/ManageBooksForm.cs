@@ -15,6 +15,7 @@ namespace Library_Management_System
         public ManageBooksForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             
             btnBack.Click += (s, e) => this.Close();
