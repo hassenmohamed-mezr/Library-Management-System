@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace Library_Management_System.Services
@@ -8,54 +9,41 @@ namespace Library_Management_System.Services
     {
         private readonly LibraryDBEntities _context;
 
-        // Constructor
         public BorrowService()
         {
             _context = new LibraryDBEntities();
         }
 
-
-
-        // Borrow a book by BookId and BookName (with fees + terms acceptance)
         public bool BorrowBook(int userId, int bookId, string bookName, bool acceptedTerms)
         {
-            // Check if the user exists
             var userExists = _context.Users.Any(u => u.UserId == userId);
             if (!userExists)
                 return false;
 
-            // Check if the book exists by BookId and BookName
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookId && b.Title.Equals(bookName, StringComparison.OrdinalIgnoreCase));
             if (book == null || book.AvailableCopies <= 0)
                 return false;
 
-            // Create a new borrow record
+            var fees = LoadDefaultFees();
             var borrow = new Borrow
             {
                 UserId = userId,
                 BookId = bookId,
                 BorrowDate = DateTime.Now,
                 IsReturned = false,
-
-                // New fields (require DB + EDMX update)
-                BaseDailyFee = 20,
-                ExtraDailyFee = 40,
+                BaseDailyFee = fees.baseDailyFee,
+                ExtraDailyFee = fees.extraDailyFee,
                 AcceptedTerms = acceptedTerms
             };
 
-            // Decrease the available copies of the book
             book.AvailableCopies -= 1;
 
-            // Add the borrow record to the database
             _context.Borrows.Add(borrow);
             _context.SaveChanges();
 
             return true;
         }
 
-
-
-        // Return a book (calculate total fee)
         public bool ReturnBook(int borrowId)
         {
             var borrow = _context.Borrows.FirstOrDefault(b => b.BorrowId == borrowId);
@@ -65,8 +53,6 @@ namespace Library_Management_System.Services
             borrow.IsReturned = true;
             borrow.ReturnDate = DateTime.Now;
 
-            // Calculate fee: first day 20, each extra day 40
-            // Days are counted by date difference; minimum 1 day
             int days = (borrow.ReturnDate.Value.Date - borrow.BorrowDate.Date).Days;
             if (days < 1) days = 1;
 
@@ -84,9 +70,6 @@ namespace Library_Management_System.Services
             return true;
         }
 
-
-
-        // Get the list of books that are currently borrowed (not returned)
         public List<Borrow> GetCurrentBorrows()
         {
             return _context.Borrows
@@ -94,9 +77,6 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
-
-
-        // Get borrow history of a specific user
         public List<Borrow> GetBorrowHistory(int userId)
         {
             return _context.Borrows
@@ -104,9 +84,6 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
-
-
-        // Validate if a book exists with the given BookId and BookName
         public bool ValidateBook(int bookId, string bookName)
         {
             var book = _context.Books
@@ -116,17 +93,11 @@ namespace Library_Management_System.Services
             return book != null && book.AvailableCopies > 0;
         }
 
-
-
-        //GetAll Borrows for Admin
         public List<Borrow> GetAllBorrows()
         {
             return _context.Borrows.ToList();
         }
 
-
-
-        // GetBorrowsInPeriod for Admin
         public List<Borrow> GetBorrowsInPeriod(DateTime startDate, DateTime endDate)
         {
             return _context.Borrows
@@ -134,14 +105,23 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
-
-
-        //Get Total Fees In Period
         public decimal GetTotalFeesInPeriod(DateTime startDate, DateTime endDate)
         {
             return _context.Borrows
                 .Where(b => b.BorrowDate >= startDate && b.BorrowDate <= endDate && b.TotalFee.HasValue)
                 .Sum(b => b.TotalFee.Value);
+        }
+
+        private (int baseDailyFee, int extraDailyFee) LoadDefaultFees()
+        {
+            int baseFee = ParseIntOrDefault(ConfigurationManager.AppSettings["DefaultBaseDailyFee"], 20);
+            int extraFee = ParseIntOrDefault(ConfigurationManager.AppSettings["DefaultExtraDailyFee"], 40);
+            return (baseFee, extraFee);
+        }
+
+        private int ParseIntOrDefault(string value, int defaultValue)
+        {
+            return int.TryParse(value, out int parsed) ? parsed : defaultValue;
         }
     }
 }

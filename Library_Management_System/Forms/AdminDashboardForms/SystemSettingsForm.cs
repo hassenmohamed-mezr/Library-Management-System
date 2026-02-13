@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Data.EntityClient;
 using System.Data.SqlClient;
 using System.IO;
 using System.Windows.Forms;
@@ -11,39 +13,33 @@ namespace Library_Management_System
         {
             InitializeComponent();
 
-            // Link events
             btnBack.Click += (s, e) => this.Close();
             btnTestConnection.Click += BtnTestConnection_Click;
             btnBackupNow.Click += BtnBackupNow_Click;
             btnSave.Click += BtnSave_Click;
             btnReset.Click += BtnReset_Click;
 
-            // Load current settings
             LoadCurrentSettings();
 
-            // Keyboard
             this.KeyPreview = true;
             this.KeyDown += SystemSettingsForm_KeyDown;
         }
 
         private void LoadCurrentSettings()
         {
-            // Default values
-            txtServerName.Text = "(local)";
-            txtDatabaseName.Text = "LibraryDB";
-            numFirstDayFee.Value = 20;
-            numExtraDayFee.Value = 40;
+            var connBuilder = GetSqlConnectionBuilderFromConfig();
+            txtServerName.Text = connBuilder.DataSource;
+            txtDatabaseName.Text = connBuilder.InitialCatalog;
+
+            numFirstDayFee.Value = ParseDecimalOrDefault(ConfigurationManager.AppSettings["DefaultBaseDailyFee"], 20);
+            numExtraDayFee.Value = ParseDecimalOrDefault(ConfigurationManager.AppSettings["DefaultExtraDailyFee"], 40);
         }
 
         private void BtnTestConnection_Click(object sender, EventArgs e)
         {
             try
             {
-                string connectionString = $"Data Source={txtServerName.Text};" +
-                                         $"Initial Catalog={txtDatabaseName.Text};" +
-                                         "Integrated Security=True";
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(GetConnectionString()))
                 {
                     conn.Open();
                     lblConnectionStatus.Text = "Status: Connected ✓";
@@ -63,21 +59,21 @@ namespace Library_Management_System
         {
             try
             {
-                string backupDir = @"C:\LibraryBackups\";
+                string backupDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LibraryBackups");
 
-                // Create directory
                 if (!Directory.Exists(backupDir))
                     Directory.CreateDirectory(backupDir);
 
-                string backupFile = $"{backupDir}LibraryDB_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak";
-
-                string backupCommand = $"BACKUP DATABASE LibraryDB TO DISK = '{backupFile}'";
+                string backupFile = Path.Combine(backupDir, $"LibraryDB_Backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak");
+                string safeDbName = txtDatabaseName.Text.Replace("]", "]]" );
+                string backupCommand = $"BACKUP DATABASE [{safeDbName}] TO DISK = @backupPath";
 
                 using (SqlConnection conn = new SqlConnection(GetConnectionString()))
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(backupCommand, conn))
                     {
+                        cmd.Parameters.AddWithValue("@backupPath", backupFile);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -94,30 +90,17 @@ namespace Library_Management_System
         {
             try
             {
-                // Test connection first
-                string connectionString = GetConnectionString();
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(GetConnectionString()))
                 {
                     conn.Open();
-
-                    // Update fees in database
-                    string updateFees = "UPDATE Borrows SET " +
-                                       $"BaseDailyFee = {numFirstDayFee.Value}, " +
-                                       $"ExtraDailyFee = {numExtraDayFee.Value} " +
-                                       "WHERE BaseDailyFee IS NOT NULL";
-
-                    using (SqlCommand cmd = new SqlCommand(updateFees, conn))
-                    {
-                        int rows = cmd.ExecuteNonQuery();
-
-                        MessageBox.Show($"Settings saved!\nUpdated {rows} borrow records.", "Success");
-
-                        // Update status
-                        lblConnectionStatus.Text = "Status: Saved ✓";
-                        lblConnectionStatus.ForeColor = System.Drawing.Color.Green;
-                    }
                 }
+
+                SaveAppSetting("DefaultBaseDailyFee", numFirstDayFee.Value.ToString("0"));
+                SaveAppSetting("DefaultExtraDailyFee", numExtraDayFee.Value.ToString("0"));
+
+                MessageBox.Show("Settings saved! New borrows will use the updated fees.", "Success");
+                lblConnectionStatus.Text = "Status: Saved ✓";
+                lblConnectionStatus.ForeColor = System.Drawing.Color.Green;
             }
             catch (Exception ex)
             {
@@ -132,7 +115,11 @@ namespace Library_Management_System
 
             if (result == DialogResult.Yes)
             {
-                LoadCurrentSettings();
+                txtServerName.Text = "(local)";
+                txtDatabaseName.Text = "LibraryDB";
+                numFirstDayFee.Value = 20;
+                numExtraDayFee.Value = 40;
+
                 lblConnectionStatus.Text = "Status: Reset to default";
                 lblConnectionStatus.ForeColor = System.Drawing.Color.Black;
 
@@ -145,18 +132,17 @@ namespace Library_Management_System
             if (e.KeyCode == Keys.Escape)
                 this.Close();
 
-            // Shortcuts
             if (e.Control)
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.T: // Test connection
+                    case Keys.T:
                         BtnTestConnection_Click(null, null);
                         break;
-                    case Keys.S: // Save
+                    case Keys.S:
                         BtnSave_Click(null, null);
                         break;
-                    case Keys.B: // Backup
+                    case Keys.B:
                         BtnBackupNow_Click(null, null);
                         break;
                 }
@@ -165,15 +151,40 @@ namespace Library_Management_System
 
         private string GetConnectionString()
         {
-            return $"Data Source={txtServerName.Text};" +
-                   $"Initial Catalog={txtDatabaseName.Text};" +
-                   "Integrated Security=True";
+            return $"Data Source={txtServerName.Text};Initial Catalog={txtDatabaseName.Text};Integrated Security=True;TrustServerCertificate=True";
+        }
+
+        private SqlConnectionStringBuilder GetSqlConnectionBuilderFromConfig()
+        {
+            string entityConn = ConfigurationManager.ConnectionStrings["LibraryDBEntities"]?.ConnectionString;
+            if (string.IsNullOrWhiteSpace(entityConn))
+                return new SqlConnectionStringBuilder("Data Source=(local);Initial Catalog=LibraryDB;Integrated Security=True");
+
+            var entityBuilder = new EntityConnectionStringBuilder(entityConn);
+            return new SqlConnectionStringBuilder(entityBuilder.ProviderConnectionString);
+        }
+
+        private void SaveAppSetting(string key, string value)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (config.AppSettings.Settings[key] == null)
+                config.AppSettings.Settings.Add(key, value);
+            else
+                config.AppSettings.Settings[key].Value = value;
+
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private decimal ParseDecimalOrDefault(string value, decimal fallback)
+        {
+            return decimal.TryParse(value, out decimal parsed) ? parsed : fallback;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            // Simple close
         }
     }
 }
