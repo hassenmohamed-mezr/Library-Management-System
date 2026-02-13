@@ -69,6 +69,10 @@ namespace Library_Management_System
 
         private void BindUsersGrid(List<User> users)
         {
+            var activeBorrowMap = _borrowService.GetCurrentBorrows()
+                .GroupBy(b => b.UserId)
+                .ToDictionary(g => g.Key, g => g.Count());
+
             var displayList = users.Select(u => new
             {
                 u.UserId,
@@ -76,7 +80,7 @@ namespace Library_Management_System
                 u.Email,
                 u.Phone,
                 CreatedAt = u.CreatedAt.ToString("yyyy-MM-dd"),
-                ActiveBorrows = _borrowService.GetCurrentBorrows().Count(b => b.UserId == u.UserId)
+                ActiveBorrows = activeBorrowMap.ContainsKey(u.UserId) ? activeBorrowMap[u.UserId] : 0
             }).ToList();
 
             gridUsers.DataSource = displayList;
@@ -108,7 +112,7 @@ namespace Library_Management_System
                     txtUserId.Text = user.UserId.ToString();
                     txtFullName.Text = user.FullName;
                     txtEmail.Text = user.Email;
-                    txtPassword.Text = user.Password;
+                    txtPassword.Clear();
                     txtPhone.Text = user.Phone;
                     chkIsAdmin.Checked = user.IsAdmin;
                 }

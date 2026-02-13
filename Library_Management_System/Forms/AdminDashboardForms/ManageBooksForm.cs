@@ -265,7 +265,7 @@ namespace Library_Management_System
                     }
                     else
                     {
-                        MessageBox.Show("Failed to delete book. It may be currently borrowed.", "Error",
+                        MessageBox.Show("Failed to delete book. It may have borrow history.", "Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
