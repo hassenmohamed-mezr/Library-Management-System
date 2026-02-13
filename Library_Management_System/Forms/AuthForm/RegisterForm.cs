@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using Library_Management_System.Services;
@@ -17,6 +18,7 @@ namespace Library_Management_System
         public RegisterForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             btnCreate.Click += btnCreate_Click;
             btnBack.Click += btnBack_Click;
@@ -39,6 +41,12 @@ namespace Library_Management_System
                 string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Please fill Full Name, Email, and Password.");
+                return;
+            }
+
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Please enter a valid email address.");
                 return;
             }
 
