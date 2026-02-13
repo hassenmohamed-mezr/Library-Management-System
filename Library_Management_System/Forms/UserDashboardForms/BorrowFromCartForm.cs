@@ -17,6 +17,7 @@ namespace Library_Management_System
         public BorrowFromCartForm(User currentUser, HashSet<int> cartBookIds)
         {
             InitializeComponent();
+            FormTheme.Apply(this);
             _currentUser = currentUser;
             _cartBookIds = cartBookIds;
 
