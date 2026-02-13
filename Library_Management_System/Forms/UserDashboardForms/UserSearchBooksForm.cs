@@ -14,6 +14,7 @@ namespace Library_Management_System
         public UserSearchBooksForm(HashSet<int> cartBookIds)
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             _cartBookIds = cartBookIds ?? new HashSet<int>();
 

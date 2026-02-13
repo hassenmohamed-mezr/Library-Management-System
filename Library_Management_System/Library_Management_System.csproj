@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\FormTheme.cs" />
     <Compile Include="Forms\AdminDashboardForms\ManageBooksForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +95,7 @@
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\BookService.cs" />
     <Compile Include="Services\BorrowService.cs" />
+    <Compile Include="Services\PasswordHasher.cs" />
     <Compile Include="Book.cs">
       <DependentUpon>LibraryDB.tt</DependentUpon>
     </Compile>
@@ -133,9 +135,11 @@
     <Compile Include="Forms\AuthForm\RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AuthForm\.Designer.cs">
+    <Compile Include="Forms\AuthForm\RegisterForm.Designer.cs" Condition="Exists('Forms\AuthForm\RegisterForm.Designer.cs')">
       <DependentUpon>RegisterForm.cs</DependentUpon>
-      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthForm\.Designer.cs" Condition="!Exists('Forms\AuthForm\RegisterForm.Designer.cs') and Exists('Forms\AuthForm\.Designer.cs')">
+      <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AuthForm\LoginForm.cs">
       <SubType>Form</SubType>
@@ -196,13 +200,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="DB\.vs\DB.slnx\FileContentIndex\0bf514cd-aa9c-4270-a707-b0fbce175e3e.vsidx" />
-    <None Include="DB\.vs\DB.slnx\FileContentIndex\5680ee3c-cc4f-4d59-ad1e-8a8305877746.vsidx" />
-    <None Include="DB\.vs\DB.slnx\FileContentIndex\a07297da-de9f-4af4-b75d-72ae2196b45e.vsidx" />
-    <None Include="DB\.vs\DB.slnx\FileContentIndex\b8bc96c3-9c17-4099-9647-23230a9567ab.vsidx" />
-    <None Include="DB\.vs\DB.slnx\v18\DocumentLayout.json" />
-    <None Include="DB\.vs\slnx.sqlite" />
-    <None Include="DB\.vs\VSWorkspaceState.json" />
     <EntityDeploy Include="LibraryDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LibraryDB.Designer.cs</LastGenOutput>
