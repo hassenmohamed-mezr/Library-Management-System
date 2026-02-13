@@ -11,6 +11,7 @@ namespace Library_Management_System
         public LoginForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             btnLogin.Click += btnLogin_Click;
             btnRegister.Click += btnRegister_Click;

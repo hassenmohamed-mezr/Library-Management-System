@@ -7,19 +7,16 @@ namespace Library_Management_System.Services
     {
         private readonly LibraryDBEntities _context;
 
-        // Constructor
         public BookService()
         {
             _context = new LibraryDBEntities();
         }
 
-        // Get all books
         public List<Book> GetAllBooks()
         {
             return _context.Books.ToList();
         }
 
-        // Add new book
         public bool AddBook(Book book)
         {
             _context.Books.Add(book);
@@ -27,7 +24,6 @@ namespace Library_Management_System.Services
             return true;
         }
 
-        // Update existing book
         public bool UpdateBook(Book updatedBook)
         {
             var book = _context.Books.FirstOrDefault(b => b.BookId == updatedBook.BookId);
@@ -44,11 +40,14 @@ namespace Library_Management_System.Services
             return true;
         }
 
-        // Delete book
         public bool DeleteBook(int bookId)
         {
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book == null)
+                return false;
+
+            bool hasHistory = _context.Borrows.Any(b => b.BookId == bookId);
+            if (hasHistory)
                 return false;
 
             _context.Books.Remove(book);
@@ -56,8 +55,6 @@ namespace Library_Management_System.Services
             return true;
         }
 
-
-        //GetBooksByIds
         public List<Book> GetBooksByIds(List<int> bookIds)
         {
             return _context.Books
@@ -65,66 +62,51 @@ namespace Library_Management_System.Services
                 .ToList();
         }
 
-
-        // Search books by title
         public List<Book> SearchByTitle(string title)
         {
             string titleLower = title.ToLower();
             return _context.Books
-                .Where(b => b.Title.ToLower().Contains(titleLower))
+                .Where(b => b.Title != null && b.Title.ToLower().Contains(titleLower))
                 .ToList();
         }
 
-
-
-        // Search books by author
         public List<Book> SearchByAuthor(string author)
         {
             string authorLower = author.ToLower();
             return _context.Books
-                .Where(b => b.Author.ToLower().Contains(authorLower))
+                .Where(b => b.Author != null && b.Author.ToLower().Contains(authorLower))
                 .ToList();
         }
 
-
-
-        // Search books by category
         public List<Book> SearchByCategory(string category)
         {
             string categoryLower = category.ToLower();
             return _context.Books
-                .Where(b => b.Category.ToLower().Contains(categoryLower))
+                .Where(b => b.Category != null && b.Category.ToLower().Contains(categoryLower))
                 .ToList();
         }
 
-
-        // Search books by any field
         public List<Book> SearchAny(string keyword)
         {
             string keywordLower = keyword.ToLower();
             return _context.Books
                 .Where(b =>
-                    b.Title.ToLower().Contains(keywordLower) ||
-                    b.Author.ToLower().Contains(keywordLower) ||
-                    b.Category.ToLower().Contains(keywordLower))
+                    (b.Title != null && b.Title.ToLower().Contains(keywordLower)) ||
+                    (b.Author != null && b.Author.ToLower().Contains(keywordLower)) ||
+                    (b.Category != null && b.Category.ToLower().Contains(keywordLower)))
                 .ToList();
         }
 
-        // Get one book for id
         public Book GetBookById(int bookId)
         {
             return _context.Books.FirstOrDefault(b => b.BookId == bookId);
         }
 
-        // Get is Active Borrows Book
         public bool HasActiveBorrows(int bookId)
         {
-            var borrowService = new BorrowService();
-            var currentBorrows = borrowService.GetCurrentBorrows();
-            return currentBorrows.Any(b => b.BookId == bookId);
+            return _context.Borrows.Any(b => b.BookId == bookId && !b.IsReturned);
         }
 
-        // This is query for D( Book , Category )
         public Dictionary<string, int> GetBooksCountByCategory()
         {
             return _context.Books
@@ -134,4 +116,3 @@ namespace Library_Management_System.Services
         }
     }
 }
-
