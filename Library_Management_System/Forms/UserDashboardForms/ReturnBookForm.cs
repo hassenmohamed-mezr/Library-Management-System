@@ -14,6 +14,7 @@ namespace Library_Management_System
         public ReturnBookForm(User currentUser)
         {
             InitializeComponent();
+            FormTheme.Apply(this);
             _currentUser = currentUser;
 
             LoadCurrentBorrows();

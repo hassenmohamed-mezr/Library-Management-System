@@ -15,6 +15,7 @@ namespace Library_Management_System
         public ReportsForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             // Link events
             btnBack.Click += (s, e) => this.Close();
