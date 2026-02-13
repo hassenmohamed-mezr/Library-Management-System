@@ -67,9 +67,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\AuthForm\.Designer.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormTheme.cs" />
     <Compile Include="Forms\AdminDashboardForms\ManageBooksForm.cs">
       <SubType>Form</SubType>
@@ -140,10 +137,7 @@
     <Compile Include="Forms\AuthForm\RegisterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AuthForm\RegisterForm.Designer.cs" Condition="Exists('Forms\AuthForm\RegisterForm.Designer.cs')">
-      <DependentUpon>RegisterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\AuthForm\.Designer.cs" Condition="!Exists('Forms\AuthForm\RegisterForm.Designer.cs') and Exists('Forms\AuthForm\.Designer.cs')">
+    <Compile Include="Forms\AuthForm\RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AuthForm\LoginForm.cs">
