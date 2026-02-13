@@ -17,6 +17,7 @@ namespace Library_Management_System
         public ManageUsersForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             // Link events
             btnBack.Click += (s, e) => this.Close();

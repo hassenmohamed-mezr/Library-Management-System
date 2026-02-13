@@ -12,6 +12,7 @@ namespace Library_Management_System
         public SystemSettingsForm()
         {
             InitializeComponent();
+            FormTheme.Apply(this);
 
             btnBack.Click += (s, e) => this.Close();
             btnTestConnection.Click += BtnTestConnection_Click;

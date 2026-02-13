@@ -15,6 +15,7 @@ namespace Library_Management_System
         public AdminDashboardForm(User currentUser)
         {
             InitializeComponent();
+            FormTheme.Apply(this);
             _currentUser = currentUser;
 
             

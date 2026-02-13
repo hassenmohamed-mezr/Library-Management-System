@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\FormTheme.cs" />
     <Compile Include="Forms\AdminDashboardForms\ManageBooksForm.cs">
       <SubType>Form</SubType>
     </Compile>
